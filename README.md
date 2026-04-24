@@ -1,5 +1,5 @@
-# YTLitePlusEXTRA
-This is a fork repo from YTLite,but add more tweaks similar to YTLitePlus for who can't build IPA or The app is unusable.
+# YTLitePlusEXTRA but with more tweaks!
+This is a fork repo from YTLite, but add more tweaks similar to YTLitePlus for who can't build IPA or The app is unusable.
 If you have any problems, feel free to open issues!
 
 > [!WARNING]
@@ -22,7 +22,7 @@ If you have any problems, feel free to open issues!
 - [Gonerino](https://github.com/castdrian/Gonerino) - Filter videos/channels/keywords that you don't want them to show up on your feeds
 - [YouGetCaption](https://github.com/PoomSmart/YouGetCaption) - Copy video captions from video overlay
 - [YTweaks](https://github.com/fosterbarnes/YTweaks) - Hide AI summary,Fix casting and more
-- [YTFlags](https://github.com/Tonwalter888/YTFlags) - Tries to make your YouTube experience even better
+- [YouMod](https://github.com/Tonwalter888/YouMod) - Tries to make your YouTube experience even better
 - [VolumeBoostYT](https://github.com/VasirakCalgux/VolumeBoostYT) - Control the sound volume through gestures **(TEMP-DISABLED)**
 
 ## How to build a YTLitePlusEXTRA IPA using Github Actions
