@@ -38,6 +38,12 @@ on:
         required: false
         type: boolean
 
+      ytweaks:
+        description: "Integrate YTweaks"
+        default: true
+        required: false
+        type: boolean
+
       # volboost:
       #   description: "Integrate VolumeBoostYT (Require iOS 16+)"
       #   default: true
@@ -135,6 +141,10 @@ jobs:
             cp -r "$THEOS/include/YouTubeHeader" "$THEOS/include/YTHeaders"
            fi
 
+      - name: Clone YTweaks
+        if: ${{ inputs.ytweaks }}
+        run: git clone --quiet --depth=1 https://github.com/fosterbarnes/YTweaks.git
+        
       - name: Clone PSHeader
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/PSHeader.git $THEOS/include/PSHeader
 
