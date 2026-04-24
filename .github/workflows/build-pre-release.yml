@@ -26,20 +26,8 @@ on:
         required: true
         type: string
 
-      ytweaks:
-        description: "Integrate YTweaks"
-        default: true
-        required: false
-        type: boolean
-
-      ytabconfig:
-        description: "Integrate YTABConfig"
-        default: true
-        required: false
-        type: boolean
-
-      yticons:
-        description: "Integrate YTIcons"
+      alderis:
+        description: "Integrate Alderis"
         default: true
         required: false
         type: boolean
@@ -49,45 +37,141 @@ on:
         default: true
         required: false
         type: boolean
-
-      ytvid:
-        description: "Integrate YTVideoErrorAlert"
+        
+      gonerino:
+        description: "Integrate Gonerino"
         default: true
         required: false
         type: boolean
 
+      iamyoutube:
+        description: "Integrate IAmYoutube"
+        default: true
+        required: false
+        type: boolean
+        
       psheader:
         description: "Integrate PSHeader"
         default: true
         required: false
         type: boolean
-
-      youpip:
-        description: "Integrate YouPiP"
-        default: true
-        required: false
-        type: boolean
-
-      ytuhd:
-        description: "Integrate YTUHD"
-        default: true
-        required: false
-        type: boolean
-
+        
       rtd:
         description: "Integrate Return-to-Dislikes"
         default: true
         required: false
         type: boolean
 
+      vbyt:
+        description: "Integrate VolumeBoosterYT"
+        default: true
+        required: false
+        type: boolean
+        
+      ycq:
+        description: "Integrate YouChooseQuality"
+        default: true
+        required: false
+        type: boolean
+        
+      ygc:
+        description: "Integrate YouGetCaption"
+        default: true
+        required: false
+        type: boolean
+        
       ygs:
         description: "Integrate YouGroupSettings"
         default: true
         required: false
         type: boolean
+        
+      yl:
+        description: "Integrate YouLoop"
+        default: true
+        required: false
+        type: boolean
 
+      youmod:
+        description: "Integrate YouMood"
+        default: true
+        required: false
+        type: boolean
+        
+      ym:
+        description: "Integrate YouMute"
+        default: true
+        required: false
+        type: boolean
+        
+      youpip:
+        description: "Integrate YouPiP"
+        default: true
+        required: false
+        type: boolean
+        
+      youshare:
+        description: "Integrate YouShare"
+        default: true
+        required: false
+        type: boolean
+        
+      youslider:
+        description: "Integrate YouSlider"
+        default: true
+        required: false
+        type: boolean
+        
+      yq:
+        description: "Integrate YouQuality"
+        default: true
+        required: false
+        type: boolean
+        
+      ys:
+        description: "Integrate YouSpeed"
+        default: true
+        required: false
+        type: boolean
+        
+      ytabconfig:
+        description: "Integrate YTABConfig"
+        default: true
+        required: false
+        type: boolean
+        
+      yticons:
+        description: "Integrate YTIcons"
+        default: true
+        required: false
+        type: boolean
+        
+      ytuhd:
+        description: "Integrate YTUHD"
+        default: true
+        required: false
+        type: boolean
+        
+      ytsv:
+        description: "Integrate YTSilentVoice"
+        default: true
+        required: false
+        type: boolean
+        
+      ytvid:
+        description: "Integrate YTVideoErrorAlert"
+        default: true
+        required: false
+        type: boolean
+        
       ytvo:
         description: "Integrate YTVideoOverlay"
+        default: true
+        required: false
+        type: boolean
+        
+      ytweaks:
+        description: "Integrate YTweaks"
         default: true
         required: false
         type: boolean
@@ -190,97 +274,105 @@ jobs:
             cp -r "$THEOS/include/YouTubeHeader" "$THEOS/include/YTHeaders"
            fi
 
-      - name: Clone YTweaks
-        if: ${{ inputs.ytweaks }}
-        run: git clone --quiet --depth=1 https://github.com/fosterbarnes/YTweaks.git
-
-      - name: Clone YTABConfig
-        if: ${{ inputs.ytabconfig }}
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTABConfig.git
-
-      - name: Clone YTIcons
-        if: ${{ inputs.yticons }}
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTIcons.git
+      - name: Clone Alderis
+        if: ${{ inputs.alderis }}
+        run: git clone --quiet --depth=1 https://github.com/hbang/Alderis.git
+        
+      - name: Clone DontEatMyContent
+        if: ${{ inputs.demc }}
+        run: git clone --quiet --depth=1 https://github.com/therealFoxster/DontEatMyContent.git
+        
+      - name: Clone Gonerino
+        if: ${{ inputs.gonerino }}
+        run: git clone --quiet --depth=1 https://github.com/castdrian/Gonerino.git
+        
+      - name: Clone IAmYouTube
+        if: ${{ inputs.iamyoutube }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/IAmYouTube.git
         
       - name: Clone PSHeader
         if: ${{ inputs.psheader }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/PSHeader.git $THEOS/include/PSHeader
-
-      - name: Clone YouPiP
-        if: ${{ inputs.youpip }}
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouPiP.git
-    
-      - name: Clone YTUHD
-        if: ${{ inputs.ytuhd }}
-        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTUHD.git
-           
+        
       - name: Clone Return-YouTube-Dislikes
         if: ${{ inputs.rtd }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/Return-YouTube-Dislikes.git
-
+        
+      - name: Clone VolumeBoostYT
+        if: ${{ inputs.vbyt }}
+        run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
+        
+      - name: Clone YouChooseQuality
+        if: ${{ inputs.ycq }}
+        run: git clone --quiet https://github.com/PoomSmart/YouChooseQuality.git
+        
+      - name: Clone YouGetCaption
+        if: ${{ inputs.ygc }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouGetCaption.git
+        
       - name: Clone YouGroupSettings
         if: ${{ inputs.ygs }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouGroupSettings.git
-           
-      - name: Clone YTVideoOverlay
-        if: ${{ inputs.ytvo }}
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTVideoOverlay.git
-          
-      - name: Clone YTABConfig
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTABConfig.git
-                  
-      - name: Clone YouQuality
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouQuality.git
-
-      - name: Clone YouSpeed
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouSpeed.git
-
-      - name: Clone DontEatMyContent
-        if: ${{ inputs.demc }}
-        run: git clone --quiet --depth=1 https://github.com/therealFoxster/DontEatMyContent.git
-
-      - name: Clone YouMute
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouMute.git
-
+        
       - name: Clone YouLoop
+        if: ${{ inputs.yl }}
         run: git clone --quiet --depth=1 https://github.com/bhackel/YouLoop.git
-
-      - name: Clone Alderis
-        run: git clone --quiet --depth=1 https://github.com/hbang/Alderis.git
-
-      - name: Clone YouSlider
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouSlider.git
-
-      - name: Clone YouChooseQuality
-        run: git clone --quiet https://github.com/PoomSmart/YouChooseQuality.git
-
-      - name: Clone YTSilentVote
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTSilentVote.git
-
-      - name: Clone YouShare
-        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YouShare.git
-
-      - name: Clone Gonerino
-        run: git clone --quiet --depth=1 https://github.com/castdrian/Gonerino.git
-
-      - name: Clone YTweaks
-        run: git clone --quiet --depth=1 https://github.com/fosterbarnes/YTweaks.git
-
-      - name: Clone YouGetCaption
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouGetCaption.git
-
+        
       - name: Clone YouMod
+        if: ${{ inputs.youmod }}
         run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YouMod.git
-
-      - name: Clone IAmYouTube
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/IAmYouTube.git
-
+        
+      - name: Clone YouMute
+        if: ${{ inputs.ym }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouMute.git
+        
+      - name: Clone YouPiP
+        if: ${{ inputs.youpip }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouPiP.git
+        
+      - name: Clone YouQuality
+        if: ${{ inputs.yq }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouQuality.git
+        
+      - name: Clone YouShare
+        if: ${{ inputs.youshare }}
+        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YouShare.git
+        
+      - name: Clone YouSlider
+        if: ${{ inputs.youslider }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouSlider.git
+        
+      - name: Clone YouSpeed
+        if: ${{ inputs.ys }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouSpeed.git
+        
+      - name: Clone YTABConfig
+        if: ${{ inputs.ytabconfig }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTABConfig.git
+        
+      - name: Clone YTIcons
+        if: ${{ inputs.yticons }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTIcons.git
+        
+      - name: Clone YTSilentVote
+        if: ${{ inputs.ytsv }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTSilentVote.git
+        
+      - name: Clone YTUHD
+        if: ${{ inputs.ytuhd }}
+        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTUHD.git
+        
       - name: Clone YTVideoErrorAlert
         if: ${{ inputs.ytvid }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTVideoErrorAlert.git
-
-      - name: Clone VolumeBoostYT
-        run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
+        
+      - name: Clone YTVideoOverlay
+        if: ${{ inputs.ytvo }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTVideoOverlay.git
+        
+      - name: Clone YTweaks
+        if: ${{ inputs.ytweaks }}
+        run: git clone --quiet --depth=1 https://github.com/fosterbarnes/YTweaks.git
         
       - name: Build YouPiP
         run: |
