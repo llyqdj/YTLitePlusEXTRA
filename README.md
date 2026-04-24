@@ -5,13 +5,18 @@ If you have any problems, feel free to open issues!
 > [!WARNING]
 > In the latest YTLite version (5.2), you have to be a member in the developer's patron [here](https://www.patreon.com/c/dayanch96/membership). 
 > Otherwise, you **CAN'T** use YTLite.
-> If you can't / don't want to be a member, temporary use YTLite version 5.2b4 for now.
+> If you can't / don't want to be a member, temporary use YTLite version **5.2b4** for now.
 
 **EDIT:** THANKS FOR 270 FORKS!🥳🎉🙏
+
+**UPDATE:** YOU CAN NOW TOGGLE ON/OFF TO CHOOSE YOUR TWEAKS! JUST GO TO ACTIONS SECTION THEN GO TO THE PRE-RELEASE.
 
 **NOTE:** Before you open a new issue, please check in [FAQs](FAQs.md) first and make sure your issue doesn't have in it.
 
 ## Main features
+- [YTweaks](https://github.com/fosterbarnes/YTweaks)
+- [YTABConfig](https://github.com/PoomSmart/YTABConfig)
+- [YTIcons](https://github.com/PoomSmart/YTIcons)
 - [YTLite](https://github.com/dayanch96/YTLite) - eg. Download Videos, No ads, Background Playback
 - [YouMute](https://github.com/PoomSmart/YouMute) - Mute the video sounds in video overlay
 - [YouSpeed](https://github.com/PoomSmart/YouSpeed) - Change video speeds in video overlay
