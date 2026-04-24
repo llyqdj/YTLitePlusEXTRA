@@ -56,6 +56,42 @@ on:
         required: false
         type: boolean
 
+      psheader:
+        description: "Integrate PSHeader"
+        default: true
+        required: false
+        type: boolean
+
+      youpip:
+        description: "Integrate YouPiP"
+        default: true
+        required: false
+        type: boolean
+
+      ytuhd:
+        description: "Integrate YTUHD"
+        default: true
+        required: false
+        type: boolean
+
+      rtd:
+        description: "Integrate Return-to-Dislikes"
+        default: true
+        required: false
+        type: boolean
+
+      ygs:
+        description: "Integrate YouGroupSettings"
+        default: true
+        required: false
+        type: boolean
+
+      ytvo:
+        description: "Integrate YTVideoOverlay"
+        default: true
+        required: false
+        type: boolean
+
 
       # volboost:
       #   description: "Integrate VolumeBoostYT (Require iOS 16+)"
@@ -167,21 +203,27 @@ jobs:
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTIcons.git
         
       - name: Clone PSHeader
+        if: ${{ inputs.psheader }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/PSHeader.git $THEOS/include/PSHeader
 
       - name: Clone YouPiP
+        if: ${{ inputs.youpip }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouPiP.git
     
       - name: Clone YTUHD
+        if: ${{ inputs.ytuhd }}
         run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTUHD.git
            
       - name: Clone Return-YouTube-Dislikes
+        if: ${{ inputs.rtd }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/Return-YouTube-Dislikes.git
 
       - name: Clone YouGroupSettings
+        if: ${{ inputs.ygs }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouGroupSettings.git
            
       - name: Clone YTVideoOverlay
+        if: ${{ inputs.ytvo }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTVideoOverlay.git
           
       - name: Clone YTABConfig
@@ -237,9 +279,8 @@ jobs:
         if: ${{ inputs.ytvid }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTVideoErrorAlert.git
 
-      # - name: Clone VolumeBoostYT
-      #   if: ${{ inputs.volboost }}
-      #   run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
+      - name: Clone VolumeBoostYT
+        run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
         
       - name: Build YouPiP
         run: |
