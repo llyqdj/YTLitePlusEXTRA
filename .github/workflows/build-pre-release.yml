@@ -26,6 +26,24 @@ on:
         required: true
         type: string
 
+      ytweaks:
+        description: "Integrate YTweaks"
+        default: true
+        required: false
+        type: boolean
+
+      ytabconfig:
+        description: "Integrate YTABConfig"
+        default: true
+        required: false
+        type: boolean
+
+      yticons:
+        description: "Integrate YTIcons"
+        default: true
+        required: false
+        type: boolean
+        
       demc:
         description: "Integrate DontEatMyContent"
         default: true
@@ -38,11 +56,6 @@ on:
         required: false
         type: boolean
 
-      ytweaks:
-        description: "Integrate YTweaks"
-        default: true
-        required: false
-        type: boolean
 
       # volboost:
       #   description: "Integrate VolumeBoostYT (Require iOS 16+)"
@@ -144,6 +157,14 @@ jobs:
       - name: Clone YTweaks
         if: ${{ inputs.ytweaks }}
         run: git clone --quiet --depth=1 https://github.com/fosterbarnes/YTweaks.git
+
+      - name: Clone YTABConfig
+        if: ${{ inputs.ytabconfig }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTABConfig.git
+
+      - name: Clone YTIcons
+        if: ${{ inputs.yticons }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTIcons.git
         
       - name: Clone PSHeader
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/PSHeader.git $THEOS/include/PSHeader
