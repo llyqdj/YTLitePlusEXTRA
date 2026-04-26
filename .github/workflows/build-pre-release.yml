@@ -50,8 +50,8 @@ on:
         required: false
         type: boolean
 
-      volumeboostyt:
-        description: "Integrate VolumeBoostYT"
+      youhidetabs:
+        description: "Integrate YouHideTabs"
         default: true
         required: false
         type: boolean
@@ -80,6 +80,12 @@ on:
         required: false
         type: boolean
 
+      iamyoutube:
+        description: "Integrate IAmYoutube"
+        default: false
+        required: false
+        type: boolean
+        
       youtubex:
         description: "Integrate YouTube-X (may crash on latest YouTube)"
         default: false
@@ -219,6 +225,7 @@ jobs:
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouGroupSettings.git
 
       - name: Clone YouHideTabs
+        if: ${{ inputs.youhidetabs }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouHideTabs.git
 
       - name: Clone YouLoop
@@ -283,6 +290,7 @@ jobs:
         run: git clone --quiet --depth=1 https://github.com/fosterbarnes/YTweaks.git
 
       - name: Clone IAmYouTube
+        if: ${{ inputs.iamyoutube }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/IAmYouTube.git
 
       - name: Clone YouAreThere
@@ -302,7 +310,6 @@ jobs:
         run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTFlags.git
 
       - name: Clone VolumeBoostYT
-        if: ${{ inputs.volumeboostyt }}
         run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
 
       - name: Build Alderis
