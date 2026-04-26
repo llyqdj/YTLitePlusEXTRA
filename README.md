@@ -9,7 +9,7 @@ If you have any problems, feel free to open issues!
 
 **EDIT:** THANKS FOR 270 FORKS!🥳🎉🙏
 
-**UPDATE:** Some of the tweaks are by default (don't worry they are very useful). Butsome of the tweaks needed to toggle on/off incase if you don't need it.
+**UPDATE:** Some of the tweaks are by default (don't worry they are very useful). Butsome of the tweaks needed to toggle on/off incase if you  don't need it.
 
 **NOTE:** Before you open a new issue, please check in [FAQs](FAQs.md) first and make sure your issue doesn't have in it.
 
