@@ -98,6 +98,12 @@ on:
         required: false
         type: boolean
 
+      ytflags:
+        description: "Integrate YTFlags (Optional)"
+        default: false
+        required: false
+        type: boolean
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -291,6 +297,10 @@ jobs:
         if: ${{ inputs.youtubex }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouTube-X.git
 
+      - name: Clone YTFlags
+        if: ${{ inputs.ytflags }}
+        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTFlags.git
+
       - name: Clone VolumeBoostYT
         if: ${{ inputs.volumeboostyt }}
         run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
@@ -339,6 +349,13 @@ jobs:
           cd YouTube-X
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/youtubex.deb
+
+      - name: Build YTFlags
+        if: ${{ inputs.ytflags }}
+        run: |
+          cd YTFlags
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytflags.deb
 
       - name: Build Return-YouTube-Dislikes
         run: |
