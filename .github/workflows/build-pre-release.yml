@@ -152,6 +152,12 @@ on:
         required: false
         type: boolean
 
+      volumeboostyt:
+        description: "Integrate VolumeBoostYT"
+        default: true
+        required: false
+        type: boolean
+        
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -336,6 +342,10 @@ jobs:
         if: ${{ inputs.ytweaks }}
         run: git clone --quiet --depth=1 https://github.com/fosterbarnes/YTweaks.git
 
+      - name: Clone VolumeBoostYT
+        if: ${{ inputs.volumeboostyt }}
+        run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
+
       - name: Build YouPiP
         run: |
           cd YouPiP
@@ -471,11 +481,11 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ytvideoerror.deb
 
-      # - name: Build VolumeBoostYT
-      #   run: |
-      #     cd VolumeBoostYT
-      #     make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless ARCHS=arm64
-      #     mv packages/*.deb ${{ github.workspace }}/volboostyt.deb
+      - name: Build VolumeBoostYT
+        run: |
+          cd VolumeBoostYT
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless ARCHS=arm64
+          mv packages/*.deb ${{ github.workspace }}/volboostyt.deb
 
       - name: Inject Tweaks Into IPA
         run: |
