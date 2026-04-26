@@ -167,6 +167,9 @@ jobs:
       - name: Clone YouQuality
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouQuality.git
 
+      - name: Clone YouMod
+        run: git clone --quiet --depth=1 https://github.com/llyqdj/YouMod.git
+
       - name: Clone YouShare
         run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YouShare.git
 
@@ -294,6 +297,12 @@ jobs:
           cd YouQuality
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/youquality.deb
+
+      - name: Build YouMod
+        run: |
+          cd YouMod
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youmod.deb
 
       - name: Build YouShare
         run: |
