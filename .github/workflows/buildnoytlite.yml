@@ -1,9 +1,15 @@
-name: Build IPA without YTLite
+name: (Pre-Release) Build YTLitePlusEXTRA IPA
 on:
   workflow_dispatch:
     inputs:
       ipa_url:
         description: "URL to the decrypted IPA file"
+        default: ""
+        required: true
+        type: string
+
+      deb_url:
+        description: "URL to your YTLite .deb file"
         default: ""
         required: true
         type: string
@@ -20,8 +26,20 @@ on:
         required: true
         type: string
 
-      demc:
-        description: "Integrate DontEatMyContent"
+      youmod:
+        description: "Integrate YouMod"
+        default: true
+        required: false
+        type: boolean
+
+      psheader:
+        description: "Integrate PSHeader"
+        default: true
+        required: false
+        type: boolean
+
+      ytamp:
+        description: "Integrate YTAnotherMiniplayer"
         default: true
         required: false
         type: boolean
@@ -32,13 +50,43 @@ on:
         required: false
         type: boolean
 
+      volumeboostyt:
+        description: "Integrate VolumeBoostYT"
+        default: true
+        required: false
+        type: boolean
+
+      youslider:
+        description: "Integrate YouSlider (Optional)"
+        default: false
+        required: false
+        type: boolean
+
+      yticons:
+        description: "Integrate YTIcons (Optional)"
+        default: false
+        required: false
+        type: boolean
+
+      ytunshorts:
+        description: "Integrate YTUnShorts (Optional)"
+        default: false
+        required: false
+        type: boolean
+
+      ytreexplore:
+        description: "Integrate YTReExplore (Optional)"
+        default: false
+        required: false
+        type: boolean
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: Build IPA without YTLite
+    name: (Pre-Release) Build YTLitePlusEXTRA IPA
     runs-on: macos-latest
     permissions:
       contents: write
@@ -47,16 +95,16 @@ jobs:
       - name: Hide Sensitive Inputs
         uses: levibostian/action-hide-sensitive-inputs@v1
         with:
-          exclude_inputs: bundle_id,display_name,demc,ytvid
+          exclude_inputs: bundle_id,display_name,ytvid
 
       - name: Download and Validate IPA
         run: |
           wget "${{ inputs.ipa_url }}" --quiet --no-verbose -O youtube.ipa
 
-          file_type=$(file --mime-type -b youtube.ipa)
+          ipa_type=$(file --mime-type -b youtube.ipa)
 
-          if [[ "$file_type" != "application/x-ios-app" && "$file_type" != "application/zip" ]]; then
-            echo "::error::Validation failed: The downloaded file is not a valid IPA. Detected type: $file_type."
+          if [[ "$ipa_type" != "application/x-ios-app" && "$ipa_type" != "application/zip" ]]; then
+            echo "::error::Validation failed: The downloaded file is not a valid IPA. Detected type: $ipa_type."
             exit 1
           fi
 
@@ -66,7 +114,7 @@ jobs:
           echo "YT_VERSION=$(grep -A 1 '<key>CFBundleVersion</key>' ytextracted/Payload/YouTube.app/Info.plist | grep '<string>' | awk -F'[><]' '{print $3}')" >> $GITHUB_ENV
 
       - name: Install Dependencies
-        run: brew install make ldid swiftlint
+        run: brew install make ldid swiftlint protobuf
 
       - name: Set PATH Environment Variables
         run: |
@@ -90,6 +138,24 @@ jobs:
           wget --quiet --no-verbose "https://github.com/inoahdev/tbd/releases/download/2.2/tbd-mac" -O /usr/local/bin/tbd
           chmod +x /usr/local/bin/tbd
 
+      - name: Download and Validate your YTLite .deb
+        run: |
+          wget "${{ inputs.deb_url }}" --quiet --no-verbose -O ytlite.deb
+
+          deb_type=$(file --mime-type -b ytlite.deb)
+
+          if [[ "$deb_type" != "application/vnd.debian.binary-package" ]]; then
+            echo "::error::Validation failed: The downloaded file is not a valid deb. Detected type: $deb_type."
+            exit 1
+          fi
+
+      - name: Get YTLite Version
+        run: |
+          ar x ytlite.deb control.tar.gz >/dev/null 2>&1
+          tar -xzf control.tar.gz ./control
+          VERSION=$(grep '^Version:' control | cut -d ' ' -f2)
+          echo "YTLITE_VERSION=$VERSION" >> $GITHUB_ENV
+
       - name: Clone Open in YouTube (Safari Extension)
         run: |
           git clone --quiet -n --depth=1 --filter=tree:0 https://github.com/BillyCurtis/OpenYouTubeSafariExtension.git
@@ -101,28 +167,23 @@ jobs:
       - name: Clone YouTubeHeader
         run: |
           git clone --quiet --depth=1 https://github.com/PoomSmart/YouTubeHeader.git $THEOS/include/YouTubeHeader
-          if [ "${{ inputs.demc }}" = "true" ]; then
-            cp -r "$THEOS/include/YouTubeHeader" "$THEOS/include/YTHeaders"
-          fi
+          cp -r "$THEOS/include/YouTubeHeader" "$THEOS/include/YTHeaders"
 
       - name: Clone Alderis
         run: git clone --quiet --depth=1 https://github.com/hbang/Alderis.git
 
       - name: Clone DontEatMyContent
-        if: ${{ inputs.demc }}
         run: git clone --quiet --depth=1 https://github.com/therealFoxster/DontEatMyContent.git
 
       - name: Clone Gonerino
         run: git clone --quiet --depth=1 https://github.com/castdrian/Gonerino.git
 
       - name: Clone PSHeader
+        if: ${{ inputs.psheader }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/PSHeader.git $THEOS/include/PSHeader
 
       - name: Clone Return-YouTube-Dislikes
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/Return-YouTube-Dislikes.git
-
-      - name: Clone YouAreThere
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouAreThere.git
 
       - name: Clone YouChooseQuality
         run: git clone --quiet https://github.com/PoomSmart/YouChooseQuality.git
@@ -133,8 +194,15 @@ jobs:
       - name: Clone YouGroupSettings
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouGroupSettings.git
 
+      - name: Clone YouHideTabs
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouHideTabs.git
+
       - name: Clone YouLoop
         run: git clone --quiet --depth=1 https://github.com/bhackel/YouLoop.git
+
+      - name: Clone YouMod
+        if: ${{ inputs.youmod }}
+        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YouMod.git
 
       - name: Clone YouMute
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouMute.git
@@ -149,6 +217,7 @@ jobs:
         run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YouShare.git
 
       - name: Clone YouSlider
+        if: ${{ inputs.youslider }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouSlider.git
 
       - name: Clone YouSpeed
@@ -157,20 +226,27 @@ jobs:
       - name: Clone YTABConfig
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTABConfig.git
 
-      - name: Clone YTAutoFullScreen
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTAutoFullScreen.git
+      - name: Clone YTAnotherMiniplayer
+        if: ${{ inputs.ytamp }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTAnotherMiniplayer.git
 
-      - name: Clone YTClassicVideoQuality
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTClassicVideoQuality.git
+      - name: Clone YTIcons
+        if: ${{ inputs.yticons }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTIcons.git
 
-      - name: Clone YTFlags
-        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTFlags.git
-
-      - name: Clone YTShortsProgress
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTShortsProgress.git
+      - name: Clone YTReExplore
+        if: ${{ inputs.ytreexplore }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTReExplore.git
 
       - name: Clone YTSilentVote
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTSilentVote.git
+
+      - name: Clone YTUHD
+        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTUHD.git
+
+      - name: Clone YTUnShorts
+        if: ${{ inputs.ytunshorts }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTUnShorts.git
 
       - name: Clone YTVideoErrorAlert
         if: ${{ inputs.ytvid }}
@@ -182,14 +258,9 @@ jobs:
       - name: Clone YTweaks
         run: git clone --quiet --depth=1 https://github.com/fosterbarnes/YTweaks.git
 
-      - name: Clone YTUHD
-        run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTUHD.git
-
-      - name: Clone YouTube-X
-        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouTube-X.git
-
-      - name: Clone youtube-native-share
-        run: git clone --quiet --depth=1 https://github.com/jkhsjdhjs/youtube-native-share.git
+      - name: Clone VolumeBoostYT
+        if: ${{ inputs.volumeboostyt }}
+        run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
 
       - name: Build Alderis
         run: |
@@ -198,7 +269,6 @@ jobs:
           mv packages/*.deb ${{ github.workspace }}/alderis.deb
 
       - name: Build DontEatMyContent
-        if: ${{ inputs.demc }}
         run: |
           cd DontEatMyContent
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
@@ -216,11 +286,12 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ryd.deb
 
-      - name: Build YouAreThere
+      - name: Build VolumeBoostYT
+        if: ${{ inputs.volumeboostyt }}
         run: |
-          cd YouAreThere
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/youarethere.deb
+          cd VolumeBoostYT
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless ARCHS=arm64
+          mv packages/*.deb ${{ github.workspace }}/volboostyt.deb
 
       - name: Build YouChooseQuality
         run: |
@@ -241,11 +312,24 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ygs.deb
 
+      - name: Build YouHideTabs
+        run: |
+          cd YouHideTabs
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youhidetabs.deb
+
       - name: Build YouLoop
         run: |
           cd YouLoop
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/youloop.deb
+
+      - name: Build YouMod
+        if: ${{ inputs.youmod }}
+        run: |
+          cd YouMod
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytflags.deb
 
       - name: Build YouMute
         run: |
@@ -272,6 +356,7 @@ jobs:
           mv packages/*.deb ${{ github.workspace }}/youshare.deb
 
       - name: Build YouSlider
+        if: ${{ inputs.youslider }}
         run: |
           cd YouSlider
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
@@ -289,29 +374,26 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ytabconfig.deb
 
-      - name: Build YTAutoFullScreen
+      - name: Build YTAnotherMiniplayer
+        if: ${{ inputs.ytamp }}
         run: |
-          cd YTAutoFullScreen
+          cd YTAnotherMiniplayer
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytautofullscreen.deb
+          mv packages/*.deb ${{ github.workspace }}/ytamp.deb
 
-      - name: Build YTClassicVideoQuality
+      - name: Build YTIcons
+        if: ${{ inputs.yticons }}
         run: |
-          cd YTClassicVideoQuality
+          cd YTIcons
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytclassicvq.deb
+          mv packages/*.deb ${{ github.workspace }}/yticons.deb
 
-      - name: Build YTFlags
+      - name: Build YTReExplore
+        if: ${{ inputs.ytreexplore }}
         run: |
-          cd YTFlags
+          cd YTReExplore
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytflags.deb
-
-      - name: Build YTShortsProgress
-        run: |
-          cd YTShortsProgress
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytshortsprogress.deb
+          mv packages/*.deb ${{ github.workspace }}/ytreexplore.deb
 
       - name: Build YTSilentVote
         run: |
@@ -324,6 +406,13 @@ jobs:
           cd YTUHD
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ytuhd.deb
+
+      - name: Build YTUnShorts
+        if: ${{ inputs.ytunshorts }}
+        run: |
+          cd YTUnShorts
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytunshorts.deb
 
       - name: Build YTVideoErrorAlert
         if: ${{ inputs.ytvid }}
@@ -344,18 +433,6 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ytweaks.deb
 
-      - name: Build YouTube-X
-        run: |
-          cd YouTube-X
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/youtubex.deb
-
-      - name: Build youtube-native-share
-        run: |
-          cd youtube-native-share
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/nativeshare.deb
-
       - name: Inject Tweaks Into IPA
         run: |
           tweaks="OpenYouTubeSafariExtension.appex"
@@ -364,19 +441,19 @@ jobs:
             tweaks="$tweaks $f"
           done
 
-          cyan -i youtube.ipa -o YTLitePlusEXTRA_NoYTLite_${{ env.YT_VERSION }}.ipa -uwef $tweaks -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }}
+          cyan -i youtube.ipa -o YTLitePlusEXTRA_${{ env.YT_VERSION }}_v${{ env.YTLITE_VERSION }}.ipa -uwef $tweaks -n "${{ inputs.display_name }}" -b ${{ inputs.bundle_id }}
 
       - name: Create a Draft Release
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: ytliteplusextra-ipa-noytlite${{ github.run_number }}
-          name: YTLitePlusEXTRA_NoYTLite_${{ env.YT_VERSION }} (${{ github.run_number }})
-          files: YTLitePlusEXTRA_NoYTLite_${{ env.YT_VERSION }}.ipa
+          tag_name: ytliteplusextra-pre-release-ipa${{ github.run_number }}
+          name: YTLitePlusEXTRA_${{ env.YT_VERSION }}_v${{ env.YTLITE_VERSION }} (${{ github.run_number }})
+          files: YTLitePlusEXTRA_${{ env.YT_VERSION }}_v${{ env.YTLITE_VERSION }}.ipa
           draft: true
 
       - name: Job Summary - Build Complete
         run: |
-          echo -e '### 🛠️ Build IPA without YTLite Complete!' >> $GITHUB_STEP_SUMMARY
+          echo -e '### 🛠️ Build YTLitePlusEXTRA IPA Complete!' >> $GITHUB_STEP_SUMMARY
 
       - name: Job Summary - Output the Draft Release Link
         run: |
