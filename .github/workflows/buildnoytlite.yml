@@ -353,7 +353,7 @@ jobs:
       - name: Build youtube-native-share
         run: |
           cd youtube-native-share
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          CFLAGS="-I$(brew --prefix protobuf)/include" make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/nativeshare.deb
 
       - name: Inject Tweaks Into IPA
