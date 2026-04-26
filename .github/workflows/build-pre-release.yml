@@ -73,7 +73,13 @@ on:
         default: true
         required: false
         type: boolean
-
+        
+      youmod:
+        description: "Integrate YouMod"
+        default: true
+        required: false
+        type: boolean
+        
       ym:
         description: "Integrate YouMute"
         default: true
@@ -288,6 +294,7 @@ jobs:
         run: git clone --quiet --depth=1 https://github.com/bhackel/YouLoop.git
 
       - name: Clone YouMod
+        if: ${{ inputs.youmod }}
         run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YouMod.git
 
       - name: Clone YouMute
