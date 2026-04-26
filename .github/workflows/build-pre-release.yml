@@ -80,6 +80,24 @@ on:
         required: false
         type: boolean
 
+      youtubex:
+        description: "Integrate YouTube-X (may crash on latest YouTube)"
+        default: false
+        required: false
+        type: boolean
+
+      ytautofullscreen:
+        description: "Integrate YTAutoFullScreen (may crash on latest YouTube)"
+        default: false
+        required: false
+        type: boolean
+
+      youarethere:
+        description: "Integrate YouAreThere (may crash on latest YouTube)"
+        default: false
+        required: false
+        type: boolean
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -261,6 +279,18 @@ jobs:
       - name: Clone IAmYouTube
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/IAmYouTube.git
 
+      - name: Clone YouAreThere
+        if: ${{ inputs.youarethere }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouAreThere.git
+
+      - name: Clone YTAutoFullScreen
+        if: ${{ inputs.ytautofullscreen }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTAutoFullScreen.git
+
+      - name: Clone YouTube-X
+        if: ${{ inputs.youtubex }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouTube-X.git
+
       - name: Clone VolumeBoostYT
         if: ${{ inputs.volumeboostyt }}
         run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
@@ -288,6 +318,27 @@ jobs:
           cd IAmYouTube
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/imyt.deb
+
+      - name: Build YouAreThere
+        if: ${{ inputs.youarethere }}
+        run: |
+          cd YouAreThere
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youarethere.deb
+
+      - name: Build YTAutoFullScreen
+        if: ${{ inputs.ytautofullscreen }}
+        run: |
+          cd YTAutoFullScreen
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytautofullscreen.deb
+
+      - name: Build YouTube-X
+        if: ${{ inputs.youtubex }}
+        run: |
+          cd YouTube-X
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youtubex.deb
 
       - name: Build Return-YouTube-Dislikes
         run: |
