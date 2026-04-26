@@ -9,26 +9,29 @@ If you have any problems, feel free to open issues!
 
 **EDIT:** THANKS FOR 270 FORKS!🥳🎉🙏
 
-**UPDATE:** YOU CAN NOW TOGGLE ON/OFF TO CHOOSE YOUR TWEAKS! JUST GO TO ACTIONS SECTION THEN GO TO THE PRE-RELEASE.
+**UPDATE:** Some of the tweaks are by default (don't worry they are very useful). Butsome of the tweaks needed to toggle on/off incase if you don't need it.
 
 **NOTE:** Before you open a new issue, please check in [FAQs](FAQs.md) first and make sure your issue doesn't have in it.
 
 ## Main features
-- [YTweaks](https://github.com/fosterbarnes/YTweaks)
-- [YTABConfig](https://github.com/PoomSmart/YTABConfig)
-- [YTIcons](https://github.com/PoomSmart/YTIcons)
+- [YTweaks](https://github.com/fosterbarnes/YTweaks) - Hide AI summary, Fix casting and more
+- [YTABConfig](https://github.com/PoomSmart/YTABConfig) - Configures A/B settings
+- [YTIcons](https://github.com/PoomSmart/YTIcons) - Custom app icons
 - [YTLite](https://github.com/dayanch96/YTLite) - eg. Download Videos, No ads, Background Playback
 - [YouMute](https://github.com/PoomSmart/YouMute) - Mute the video sounds in video overlay
 - [YouSpeed](https://github.com/PoomSmart/YouSpeed) - Change video speeds in video overlay
-- [YTABConfig](https://github.com/PoomSmart/YTABConfig) - Configures A/B settings
 - [YouSlider](https://github.com/PoomSmart/YouSlider) - Customizes video slider and scrubber
 - [YouChooseQuality](https://github.com/PoomSmart/YouChooseQuality) - Auto select the video quality from your scenario
 - [YouShare](https://github.com/Tonwalter888/YouShare) - Copy video URL faster from video overlay
 - [Gonerino](https://github.com/castdrian/Gonerino) - Filter videos/channels/keywords that you don't want them to show up on your feeds
 - [YouGetCaption](https://github.com/PoomSmart/YouGetCaption) - Copy video captions from video overlay
-- [YTweaks](https://github.com/fosterbarnes/YTweaks) - Hide AI summary,Fix casting and more
 - [YouMod](https://github.com/Tonwalter888/YouMod) - Tries to make your YouTube experience even better
 - [VolumeBoostYT](https://github.com/VasirakCalgux/VolumeBoostYT) - Control the sound volume through gestures
+- [YTUnShorts](https://github.com/PoomSmart/YTUnShorts) - Removes the Shorts tab and redirects Shorts to regular videos
+- [IAmYouTube](https://github.com/PoomSmart/IAmYouTube) - Identifies the app as YouTube for compatibility
+- [YouHideTabs](https://github.com/PoomSmart/YouHideTabs) - Hide unwanted tabs from the tab bar
+- [YTReExplore](https://github.com/PoomSmart/YTReExplore) - Replaces the Shorts tab with the Explore tab
+- [YTAnotherMiniplayer](https://github.com/PoomSmart/YTAnotherMiniplayer) - Enables the miniplayer for all videos
 
 **AND MORE!!!**
 
