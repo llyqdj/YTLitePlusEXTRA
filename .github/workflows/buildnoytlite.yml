@@ -66,7 +66,7 @@ jobs:
           echo "YT_VERSION=$(grep -A 1 '<key>CFBundleVersion</key>' ytextracted/Payload/YouTube.app/Info.plist | grep '<string>' | awk -F'[><]' '{print $3}')" >> $GITHUB_ENV
 
       - name: Install Dependencies
-        run: brew install make ldid swiftlint protobuf
+        run: brew install make ldid swiftlint
 
       - name: Set PATH Environment Variables
         run: |
@@ -188,8 +188,7 @@ jobs:
       - name: Clone YouTube-X
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouTube-X.git
 
-      - name: Clone youtube-native-share
-        run: git clone --quiet --depth=1 https://github.com/jkhsjdhjs/youtube-native-share.git
+
 
       - name: Build Alderis
         run: |
@@ -350,11 +349,7 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/youtubex.deb
 
-      - name: Build youtube-native-share
-        run: |
-          cd youtube-native-share
-          CFLAGS="-I$(brew --prefix protobuf)/include" make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/nativeshare.deb
+
 
       - name: Inject Tweaks Into IPA
         run: |
