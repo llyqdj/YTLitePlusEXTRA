@@ -56,30 +56,24 @@ on:
         required: false
         type: boolean
 
-      ygc:
-        description: "Integrate YouGetCaption"
-        default: true
-        required: false
-        type: boolean
-
-      ygs:
-        description: "Integrate YouGroupSettings"
-        default: true
-        required: false
-        type: boolean
-
       yl:
         description: "Integrate YouLoop"
         default: true
         required: false
         type: boolean
-        
+
+      youhidetabs:
+        description: "Integrate YouHideTabs"
+        default: true
+        required: false
+        type: boolean
+
       youmod:
         description: "Integrate YouMod"
         default: true
         required: false
         type: boolean
-        
+
       ym:
         description: "Integrate YouMute"
         default: true
@@ -122,8 +116,14 @@ on:
         required: false
         type: boolean
 
-      yticons:
-        description: "Integrate YTIcons"
+      ytamp:
+        description: "Integrate YTAnotherMiniplayer"
+        default: true
+        required: false
+        type: boolean
+
+      ytreexplore:
+        description: "Integrate YTReExplore"
         default: true
         required: false
         type: boolean
@@ -134,8 +134,8 @@ on:
         required: false
         type: boolean
 
-      ytsv:
-        description: "Integrate YTSilentVoice"
+      ytunshorts:
+        description: "Integrate YTUnShorts"
         default: true
         required: false
         type: boolean
@@ -163,7 +163,7 @@ on:
         default: true
         required: false
         type: boolean
-        
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -282,12 +282,14 @@ jobs:
         run: git clone --quiet https://github.com/PoomSmart/YouChooseQuality.git
 
       - name: Clone YouGetCaption
-        if: ${{ inputs.ygc }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouGetCaption.git
 
       - name: Clone YouGroupSettings
-        if: ${{ inputs.ygs }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouGroupSettings.git
+
+      - name: Clone YouHideTabs
+        if: ${{ inputs.youhidetabs }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouHideTabs.git
 
       - name: Clone YouLoop
         if: ${{ inputs.yl }}
@@ -325,17 +327,27 @@ jobs:
         if: ${{ inputs.ytabconfig }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTABConfig.git
 
+      - name: Clone YTAnotherMiniplayer
+        if: ${{ inputs.ytamp }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTAnotherMiniplayer.git
+
       - name: Clone YTIcons
-        if: ${{ inputs.yticons }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTIcons.git
 
+      - name: Clone YTReExplore
+        if: ${{ inputs.ytreexplore }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTReExplore.git
+
       - name: Clone YTSilentVote
-        if: ${{ inputs.ytsv }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTSilentVote.git
 
       - name: Clone YTUHD
         if: ${{ inputs.ytuhd }}
         run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YTUHD.git
+
+      - name: Clone YTUnShorts
+        if: ${{ inputs.ytunshorts }}
+        run: git clone --quiet --depth=1 https://github.com/PoomSmart/YTUnShorts.git
 
       - name: Clone YTVideoErrorAlert
         if: ${{ inputs.ytvid }}
@@ -353,53 +365,11 @@ jobs:
         if: ${{ inputs.volumeboostyt }}
         run: git clone --quiet --depth=1 https://github.com/VasirakCalgux/VolumeBoostYT.git
 
-      - name: Build YouPiP
+      - name: Build Alderis
         run: |
-          cd YouPiP
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/youpip.deb
-
-      - name: Build YTUHD
-        run: |
-          cd YTUHD
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytuhd.deb
-
-      - name: Build Return-YouTube-Dislikes
-        run: |
-          cd Return-YouTube-Dislikes
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ryd.deb
-
-      - name: Build YouGroupSettings
-        run: |
-          cd YouGroupSettings
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ygs.deb
-
-      - name: Build YTVideoOverlay
-        run: |
-          cd YTVideoOverlay
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytvo.deb
-
-      - name: Build YTABConfig
-        run: |
-          cd YTABConfig
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytabconfig.deb
-
-      - name: Build YouQuality
-        run: |
-          cd YouQuality
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/youquality.deb
-
-      - name: Build YouSpeed
-        run: |
-          cd YouSpeed
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/youspeed.deb
+          cd Alderis
+          make clean package DEBUG=0 FINALPACKAGE=1 ARCHS=arm64
+          mv packages/*.deb ${{ github.workspace }}/alderis.deb
 
       - name: Build DontEatMyContent
         if: ${{ inputs.demc }}
@@ -408,54 +378,40 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/demc.deb
 
-      - name: Build YouMute
+      - name: Build Gonerino
+        if: ${{ inputs.gonerino }}
         run: |
-          cd YouMute
+          cd Gonerino
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ym.deb
+          mv packages/*.deb ${{ github.workspace }}/gonerino.deb
 
-      - name: Build YouLoop
+      - name: Build IAmYouTube
         run: |
-          cd YouLoop
+          cd IAmYouTube
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/youloop.deb
+          mv packages/*.deb ${{ github.workspace }}/imyt.deb
 
-      - name: Build YouSlider
+      - name: Build Return-YouTube-Dislikes
+        if: ${{ inputs.rtd }}
         run: |
-          cd YouSlider
+          cd Return-YouTube-Dislikes
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/youslider.deb
+          mv packages/*.deb ${{ github.workspace }}/ryd.deb
 
-      - name: Build Alderis
+      - name: Build VolumeBoostYT
+        if: ${{ inputs.volumeboostyt }}
         run: |
-          cd Alderis
-          make clean package DEBUG=0 FINALPACKAGE=1 ARCHS=arm64
-          mv packages/*.deb ${{ github.workspace }}/alderis.deb
+          cd VolumeBoostYT
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless ARCHS=arm64
+          mv packages/*.deb ${{ github.workspace }}/volboostyt.deb
 
       - name: Build YouChooseQuality
+        if: ${{ inputs.ycq }}
         run: |
           cd YouChooseQuality
           git checkout 1585a3691b2ef0b59d42c40c31639fd8b79e2cd4
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/youchoose.deb
-
-      - name: Build YTSilentVote
-        run: |
-          cd YTSilentVote
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytnovote.deb
-
-      - name: Build YouShare
-        run: |
-          cd YouShare
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/youshare.deb
-
-      - name: Build Gonerino
-        run: |
-          cd Gonerino
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/gonerino.deb
 
       - name: Build YouGetCaption
         run: |
@@ -463,23 +419,121 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ygc.deb
 
-      - name: Build YTweaks
+      - name: Build YouGroupSettings
         run: |
-          cd YTweaks
+          cd YouGroupSettings
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/ytweaks.deb
+          mv packages/*.deb ${{ github.workspace }}/ygs.deb
+
+      - name: Build YouHideTabs
+        if: ${{ inputs.youhidetabs }}
+        run: |
+          cd YouHideTabs
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youhidetabs.deb
+
+      - name: Build YouLoop
+        if: ${{ inputs.yl }}
+        run: |
+          cd YouLoop
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youloop.deb
 
       - name: Build YouMod
+        if: ${{ inputs.youmod }}
         run: |
           cd YouMod
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ytflags.deb
 
-      - name: Build IAmYouTube
+      - name: Build YouMute
+        if: ${{ inputs.ym }}
         run: |
-          cd IAmYouTube
+          cd YouMute
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/imyt.deb
+          mv packages/*.deb ${{ github.workspace }}/ym.deb
+
+      - name: Build YouPiP
+        if: ${{ inputs.youpip }}
+        run: |
+          cd YouPiP
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youpip.deb
+
+      - name: Build YouQuality
+        if: ${{ inputs.yq }}
+        run: |
+          cd YouQuality
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youquality.deb
+
+      - name: Build YouShare
+        if: ${{ inputs.youshare }}
+        run: |
+          cd YouShare
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youshare.deb
+
+      - name: Build YouSlider
+        if: ${{ inputs.youslider }}
+        run: |
+          cd YouSlider
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youslider.deb
+
+      - name: Build YouSpeed
+        if: ${{ inputs.ys }}
+        run: |
+          cd YouSpeed
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/youspeed.deb
+
+      - name: Build YTABConfig
+        if: ${{ inputs.ytabconfig }}
+        run: |
+          cd YTABConfig
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytabconfig.deb
+
+      - name: Build YTAnotherMiniplayer
+        if: ${{ inputs.ytamp }}
+        run: |
+          cd YTAnotherMiniplayer
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytamp.deb
+
+      - name: Build YTIcons
+        run: |
+          cd YTIcons
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/yticons.deb
+
+      - name: Build YTReExplore
+        if: ${{ inputs.ytreexplore }}
+        run: |
+          cd YTReExplore
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytreexplore.deb
+
+      - name: Build YTSilentVote
+        run: |
+          cd YTSilentVote
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytnovote.deb
+
+      - name: Build YTUHD
+        if: ${{ inputs.ytuhd }}
+        run: |
+          cd YTUHD
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytuhd.deb
+
+      - name: Build YTUnShorts
+        if: ${{ inputs.ytunshorts }}
+        run: |
+          cd YTUnShorts
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytunshorts.deb
 
       - name: Build YTVideoErrorAlert
         if: ${{ inputs.ytvid }}
@@ -488,11 +542,19 @@ jobs:
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
           mv packages/*.deb ${{ github.workspace }}/ytvideoerror.deb
 
-      - name: Build VolumeBoostYT
+      - name: Build YTVideoOverlay
+        if: ${{ inputs.ytvo }}
         run: |
-          cd VolumeBoostYT
-          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless ARCHS=arm64
-          mv packages/*.deb ${{ github.workspace }}/volboostyt.deb
+          cd YTVideoOverlay
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytvo.deb
+
+      - name: Build YTweaks
+        if: ${{ inputs.ytweaks }}
+        run: |
+          cd YTweaks
+          make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
+          mv packages/*.deb ${{ github.workspace }}/ytweaks.deb
 
       - name: Inject Tweaks Into IPA
         run: |
