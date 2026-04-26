@@ -56,12 +56,6 @@ on:
         required: false
         type: boolean
 
-      yl:
-        description: "Integrate YouLoop"
-        default: true
-        required: false
-        type: boolean
-
       youhidetabs:
         description: "Integrate YouHideTabs"
         default: true
@@ -88,12 +82,6 @@ on:
 
       youshare:
         description: "Integrate YouShare"
-        default: true
-        required: false
-        type: boolean
-
-      youslider:
-        description: "Integrate YouSlider"
         default: true
         required: false
         type: boolean
@@ -292,7 +280,6 @@ jobs:
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouHideTabs.git
 
       - name: Clone YouLoop
-        if: ${{ inputs.yl }}
         run: git clone --quiet --depth=1 https://github.com/bhackel/YouLoop.git
 
       - name: Clone YouMod
@@ -316,7 +303,6 @@ jobs:
         run: git clone --quiet --depth=1 https://github.com/Tonwalter888/YouShare.git
 
       - name: Clone YouSlider
-        if: ${{ inputs.youslider }}
         run: git clone --quiet --depth=1 https://github.com/PoomSmart/YouSlider.git
 
       - name: Clone YouSpeed
@@ -433,7 +419,6 @@ jobs:
           mv packages/*.deb ${{ github.workspace }}/youhidetabs.deb
 
       - name: Build YouLoop
-        if: ${{ inputs.yl }}
         run: |
           cd YouLoop
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
@@ -475,7 +460,6 @@ jobs:
           mv packages/*.deb ${{ github.workspace }}/youshare.deb
 
       - name: Build YouSlider
-        if: ${{ inputs.youslider }}
         run: |
           cd YouSlider
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
