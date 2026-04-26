@@ -331,10 +331,11 @@ jobs:
           mv packages/*.deb ${{ github.workspace }}/gonerino.deb
 
       - name: Build IAmYouTube
+        if: ${{ inputs.iamyoutube }}
         run: |
           cd IAmYouTube
           make clean package DEBUG=0 FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
-          mv packages/*.deb ${{ github.workspace }}/imyt.deb
+          mv packages/*.deb ${{ github.workspace }}/iamyoutube.deb
 
       - name: Build YouAreThere
         if: ${{ inputs.youarethere }}
